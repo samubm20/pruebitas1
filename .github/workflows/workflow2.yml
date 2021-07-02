@@ -45,17 +45,13 @@ jobs:
               name: target
           - name: Install Heroku CLI
             run: curl https://cli-assets.heroku.com/install-ubuntu.sh | sh   
-          - name: Change image name to point to Heroku registry
-            run: docker tag webapp registry.heroku.com/$HEROKU_APP/web   
           - name: Login in Heroku container registry
             run: heroku container:login   
-          - name: Push image to Heroku Registry
-            run: docker push registry.heroku.com/$HEROKU_APP/web
 
 
     deploy_to_heroku:
       name: Deploy to Heroku
-      runs-on: ubuntu-latest
+      runs-on: ubuntu-20.04
       needs: [publish_in_heroku_registry]
       env:
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
@@ -77,7 +73,7 @@ jobs:
           - name: Clone repository
             uses: actions/checkout@v2
           - name: Test Selenium
-            run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.selenium.*Test' test "-Dhost=https://git.heroku.com/ais-destevezr-sbravoma-2021.git" test
+            run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.selenium.*Test' test "-Dhost=https://git.heroku.com/pruebitas1.git" test
           - name: Test ApiRest
-            run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.rest.*Test' test "-Dhost=https://git.heroku.com/ais-destevezr-sbravoma-2021.git" test            
+            run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.rest.*Test' test "-Dhost=https://git.heroku.com/pruebitas1.git" test            
            
