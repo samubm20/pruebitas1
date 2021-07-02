@@ -1,39 +1,36 @@
-name: second
-
-on:
-  push:
-    branches:
-      [master]
-
+name : second
+on : 
+  pull_request:
+        branches:
+            [master]
   workflow_dispatch:
 
 jobs:
     build:
-
-
         runs-on: ubuntu-20.04
-        strategy:
-            fail-fast: false
-        steps:
-          - uses: actions/checkout@v2
-          - name: Setup java
-            uses: actions/setup-java@v1
-            with:
-              java-version: '11'
-          - name: Test Unitary
-            run: mvn -B '-Dtest=es.urjc.code.daw.library.unitary.*Test' test
-          - name: Test ApiRest
-            run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.rest.*Test' test
-          - name: Test Selenium
-            run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.selenium.*Test' test 
-          - name: 'Upload Artifact'
-            uses: actions/upload-artifact@v2
-            with:
-              name: target
-              path: target
-              retention-days: '1'
+        steps:     
+        - uses: actions/checkout@v2 
+        - name: Setup java
+          uses: actions/setup-java@v1
+          with:
+            java-version: '11'
+        - name: Test unitary
+          run: mvn -B '-Dtest=es.urjc.code.daw.library.unitary.*Test' test
+        - name: Test Selenium
+          run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.selenium.*Test' test
+        - name: Test ApiRest
+          run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.rest.*Test' test
+        - name: Build Native with Maven
+          run: mvn -B package -DskipTests
+        - name: Upload jar for next job
+          uses: actions/upload-artifact@v1
+          with:
+            name: target
+            path: target
+            retention-days: '1'
 
     publish_in_heroku_registry:
+        name: Publish in Heroku Registry
         runs-on: ubuntu-20.04
         needs: [build]
         env:
@@ -46,13 +43,14 @@ jobs:
             uses: actions/download-artifact@v1
             with:
               name: target
-          - name: Generate tag
-            run: echo ::set-output name=tag::$VERSION=$(mvn -q help:evaluate -Dexpression=project.version-DforceStdout)
-            id: project
           - name: Install Heroku CLI
-            run: curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
-          - name: Login to eroku container resistry
-            run: heroku container:login 
+            run: curl https://cli-assets.heroku.com/install-ubuntu.sh | sh   
+          - name: Change image name to point to Heroku registry
+            run: docker tag webapp registry.heroku.com/$HEROKU_APP/web   
+          - name: Login in Heroku container registry
+            run: heroku container:login   
+          - name: Push image to Heroku Registry
+            run: docker push registry.heroku.com/$HEROKU_APP/web
 
 
     deploy_to_heroku:
