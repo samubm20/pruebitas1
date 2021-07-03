@@ -4,6 +4,16 @@ on :
     types: [created]
   workflow_dispatch:
 jobs:
+    build:
+        runs-on: ubuntu-20.04
+        steps:
+        - name: Upload jar for next job
+          uses: actions/upload-artifact@v1
+          with:
+            name: target
+            path: target
+            retention-days: '1'
+    
     publish_in_dockerhub:
         runs-on: ubuntu-20.04
         steps:
