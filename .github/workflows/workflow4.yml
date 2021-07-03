@@ -3,7 +3,7 @@ on :
   schedule:
      - cron: '0 19 * * *'
   workflow_dispatch:
-  jobs:
+jobs:
     build:
         runs-on: ubuntu-20.04
         steps:     
