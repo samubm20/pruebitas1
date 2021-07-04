@@ -1,7 +1,6 @@
 name : third
 on : 
-  release:
-      - created
+ created
   workflow_dispatch:
 jobs:
     build:
