@@ -1,6 +1,7 @@
 name : third
-on : 
- create
+on :
+ release:
+  create
 
 jobs:
     build:
@@ -26,6 +27,7 @@ jobs:
         steps:
           - name: Clone repository
             uses: actions/checkout@v2
+
           - name: Download Jar from previous job
             uses: actions/download-artifact@v1
             with:
