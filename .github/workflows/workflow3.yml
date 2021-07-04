@@ -1,7 +1,8 @@
 name : third
 on : 
   release:
-    types: [created]
+    types:
+      - created
   workflow_dispatch:
 jobs:
     build:
@@ -40,28 +41,3 @@ jobs:
             run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/webapp:${{ steps.project.outputs.tag }} .
           - name: Push image to DockerHub
             run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/webapp:${{ steps.project.outputs.tag}}
-            
-    publish_in_heroku_registry:
-        name: Publish in Heroku Registry
-        runs-on: ubuntu-20.04
-        needs: [publish_in_dockerhub]
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-          HEROKU_APP: ${{ secrets.HEROKU_APP }}
-        steps:   
-          - name: Clone repository
-            uses: actions/checkout@v2
-          - name: Download Jar from previous job
-            uses: actions/download-artifact@v1
-            with:
-              name: target
-          - name: Build Docker Image
-            run: docker build -t webapp .   
-          - name: Install Heroku CLI
-            run: curl https://cli-assets.heroku.com/install-ubuntu.sh | sh   
-          - name: Change image name to point to Heroku registry
-            run: docker tag webapp registry.heroku.com/$HEROKU_APP/web   
-          - name: Login in Heroku container registry
-            run: heroku container:login   
-          - name: Push image to Heroku Registry
-            run: docker push registry.heroku.com/$HEROKU_APP/web
