@@ -9,6 +9,8 @@ jobs:
         runs-on: ubuntu-20.04
         steps:     
         - uses: actions/checkout@v2 
+          with:
+            ref: 'release'
         - name: Setup java
           uses: actions/setup-java@v1
           with:
@@ -28,7 +30,8 @@ jobs:
         steps:
           - name: Clone repository
             uses: actions/checkout@v2
-
+            with:
+              ref: 'release'
           - name: Download Jar from previous job
             uses: actions/download-artifact@v1
             with:
