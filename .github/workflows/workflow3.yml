@@ -1,9 +1,8 @@
 name : third
-on :
- push:
- release:
-   types:
-     - create
+on : 
+  branches:
+      [release]
+  workflow_dispatch:
 
 jobs:
     build:
