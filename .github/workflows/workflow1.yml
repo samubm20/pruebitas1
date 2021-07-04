@@ -1,11 +1,9 @@
 name: first
 
 on:
-  push:
-    branches:
-      [master]
+  create
 
-  workflow_dispatch:
+
 
 jobs:
     build:
