@@ -87,6 +87,6 @@ jobs:
           - name: Clone repository
             uses: actions/checkout@v2
           - name: Test Selenium
-            run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.selenium.*Test' test "-Dhost=https://git.heroku.com/ais-aherrerag-efernandezo-2021.git" test
+            run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.selenium.*Test' test "-Dhost=https://git.heroku.com/pruebitas1.git" test
           - name: Test ApiRest
-            run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.rest.*Test' test "-Dhost=https://git.heroku.com/ais-aherrerag-efernandezo-2021.git" test
+            run: mvn -B '-Dtest=es.urjc.code.daw.library.e2e.rest.*Test' test "-Dhost=https://git.heroku.com/pruebitas1.git" test
