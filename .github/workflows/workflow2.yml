@@ -62,7 +62,7 @@ jobs:
         - name: Login in Heroku
           run: heroku container:login
         - name: Deploy in Heroku
-          run: heroku container:release web --pruebitas1
+          run: heroku container:release web worker
 
     smoketest_on_heroku_app:
         name: Execute Smoke Test
